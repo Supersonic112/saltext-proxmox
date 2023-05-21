@@ -422,16 +422,22 @@ def avail_locations(call=None):
     return ret
 
 
-def avail_images(call=None, location="local"):
+def avail_images(call=None, kwargs=None):
     """
-    Return a list of the images that are on the provider
+    Return a list of the images that are on the provider (by default, only the 'local' storage location is checked)
 
     CLI Example:
 
     .. code-block:: bash
 
         salt-cloud --list-images my-proxmox-config
+        salt-cloud --function avail_images my-proxmox-config [location=my-storage]
     """
+
+    location="local"
+    if isinstance(kwargs, dict):
+        location = kwargs.get("location", location)
+
     if call == "action":
         raise SaltCloudSystemExit(
             "The avail_images function must be called with "
